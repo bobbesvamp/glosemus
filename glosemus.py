@@ -15,8 +15,28 @@ def meny():
     return intvalg
 
 def legginn():
-    
-    return
+    qna = {}
+    teller = 1
+    print("Legg inn spørsmål og svar. Blank avslutter.\n")
+    while True:
+        question = input(f"Spørsmål {teller:2d}:").strip()
+        if (question == ""):
+            quit = input("Vil du avslutte innlegging av gloser? (J/N)")
+            if quit.lower() == 'j':
+                break
+            else:
+                continue
+        answer = input(f"Svar     {teller:2d}:").strip()
+        if (answer == ""):
+            quit = input("Vil du avslutte innlegging av gloser? (J/N)")
+            if quit.lower() == 'j':
+                break
+            else:
+                continue
+        qna[question] = answer
+        teller += 1
+        print()
+    return qna
 
 
 def glosetest():
@@ -30,8 +50,11 @@ while(True):
     #print(f"Du skrev {valg}")
 
     if(valg==1):
-        legginn()
+        qna = legginn()
+        # skriv ordboken til en fil her
+        print(qna)
     elif(valg==2):
+        # før glosetest må man velge en glosefil
         glosetest()
     elif(valg==3):
         print("Ha det bra og god påske")
