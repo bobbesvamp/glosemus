@@ -39,8 +39,26 @@ def legginn():
     return qna
 
 
-def glosetest():
+def skrivtilfil(oppgaver, filnavn=""): 
+    """Write a dictionary of strings to file 
 
+    Args:
+        oppgaver (dict): dictionary of question and answer strings
+        filnavn (str): filename or empty string to ask
+    """
+    if filnavn == "":
+        while(not filnavn.isalnum()):
+            filnavn = input("Oppgi navn på oppgavefil:")
+
+    with open(filnavn, "wt") as fh:
+        for oppgave in oppgaver:
+            svar = oppgaver[oppgave]
+            fh.write(f"{oppgave}|{svar}\n")
+
+
+
+def glosetest():
+    
     return
 
 # Hovedprogram
@@ -51,8 +69,7 @@ while(True):
 
     if(valg==1):
         qna = legginn()
-        # skriv ordboken til en fil her
-        print(qna)
+        skrivtilfil(qna) # skriv ordboken til en fil her
     elif(valg==2):
         # før glosetest må man velge en glosefil
         glosetest()
