@@ -1,3 +1,8 @@
+#!/usr/bin/python3
+from glob import glob
+import os
+
+katalog = '/home/erik/Documents/program/glosemus'
 
 def meny():
     print("-------------------------")
@@ -48,18 +53,72 @@ def skrivtilfil(oppgaver, filnavn=""):
     """
     if filnavn == "":
         while(not filnavn.isalnum()):
-            filnavn = input("Oppgi navn på oppgavefil:")
+            filnavn = input("Lagre glosefil med navn: ")
 
+    filnavn += '.glo'
+    filnavn = os.path.join(katalog, filnavn)
     with open(filnavn, "wt") as fh:
         for oppgave in oppgaver:
             svar = oppgaver[oppgave]
             fh.write(f"{oppgave}|{svar}\n")
-
-
-
-def glosetest():
-    
+    print(f"Lagret gloser i filen {filnavn}\n")
     return
+
+
+def lesfrafil(filnavn):
+    filnavn += '.glo'
+    filnavn = os.path.join(katalog, filnavn)
+    qna = {}
+    with open(filnavn, "rt") as fh:
+        for linje in fh:
+            oppgave, svar = linje.strip().split("|")
+            qna[oppgave] = svar
+    return(qna)
+
+
+def vurdering(prosent):
+    if prosent < 25:
+        return "Øvelse gjør mester!"
+    elif prosent < 50:
+        return "Med litt øvelse kan du nå toppen!"
+    elif prosent < 75:
+        return "Stå på, du nærmer deg!"
+    elif prosent < 100:
+        return "Strålende, stå på!"
+    else:
+        return "Gratulerer, perfekt score!"
+
+def glosetest(oppgaver, glosefil):
+    poeng = 0
+    mulige = len(oppgaver)
+    print(f"\nVelkommen til gloseprøven '{glosefil}' med {mulige} spørsmål!\n")
+    for oppgave in oppgaver:
+        svar = input(f"{oppgave} -> ")
+        if svar == oppgaver[oppgave]:
+            print("Riktig, rett og bra!")
+            poeng += 1
+        else:
+            print(f"Nei, og fy, det skulle være: {oppgaver[oppgave]}")
+    melding = vurdering(100*poeng/mulige)
+    print(f"\n********************************")
+    print(melding)
+    print(f"Du fikk {poeng} av {mulige} mulige")
+    print(f"********************************")
+    return
+
+def velgenfil():
+    glosefiler = [os.path.splitext( os.path.basename(f))[0] for f in glob(os.path.join(katalog, '*.glo'))]
+    N = len(glosefiler)
+    filnummer = 0
+    print("\nDisse glosefilene finnes i systemet\n--------------------------------------")
+    for i, gf in enumerate(glosefiler):
+        print(f"{i+1:2d} - {gf}")
+    while filnummer < 1 or filnummer > N: 
+        filnummer = input(f"Velg en glosefil fra listen : ")
+        filnummer = int(filnummer)
+    filnavn = glosefiler[filnummer-1]
+    return filnavn
+
 
 # Hovedprogram
 #------------------------------------------
@@ -72,7 +131,10 @@ while(True):
         skrivtilfil(qna) # skriv ordboken til en fil her
     elif(valg==2):
         # før glosetest må man velge en glosefil
-        glosetest()
+        glosefil = velgenfil()
+        qna = lesfrafil(glosefil)
+        # kjør gloseprøve
+        glosetest(qna, glosefil)
     elif(valg==3):
         print("Ha det bra og god påske")
         break
