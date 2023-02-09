@@ -115,7 +115,10 @@ def velgenfil():
         print(f"{i+1:2d} - {gf}")
     while filnummer < 1 or filnummer > N: 
         filnummer = input(f"Velg en glosefil fra listen : ")
-        filnummer = int(filnummer)
+        try:
+            filnummer = int(filnummer)
+        except:
+            filnummer = 0
     filnavn = glosefiler[filnummer-1]
     return filnavn
 
